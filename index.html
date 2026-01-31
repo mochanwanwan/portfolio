@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大高 充 – Business & AI Architect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+            scroll-behavior: smooth;
+            font-weight: 300;
+            letter-spacing: -0.01em;
+        }
+
+        .font-display {
+            font-family: 'Playfair Display', 'Noto Sans JP', serif;
+        }
+
+        .gradient-mesh {
+            background:
+                radial-gradient(at 10% 20%, rgba(99, 102, 241, 0.03) 0px, transparent 50%),
+                radial-gradient(at 80% 80%, rgba(168, 85, 247, 0.02) 0px, transparent 50%),
+                radial-gradient(at 60% 0%, rgba(129, 140, 248, 0.02) 0px, transparent 50%);
+        }
+
+        .text-balance {
+            text-wrap: balance;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .animate-gradient {
+            background-size: 200% 200%;
+            animation: gradient-shift 8s ease infinite;
+        }
+
+        .frosted {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .dark-frosted {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .hover-lift {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-8px);
+        }
+
+        ::selection {
+            background-color: rgba(99, 102, 241, 0.15);
+            color: inherit;
+        }
+
+        .grain {
+            position: relative;
+        }
+
+        .grain::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.015;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .border-gradient {
+            border-image: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2)) 1;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f8fafc;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #4f46e5, #9333ea);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav id="nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-6">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between">
+                <button onclick="scrollToTop()" class="group flex flex-col items-start gap-1 cursor-pointer">
+                    <span class="text-sm font-medium tracking-[0.3em] text-slate-900 uppercase transition-colors group-hover:text-indigo-600">
+                        Business & AI
+                    </span>
+                </button>
+
+                <div class="hidden md:flex items-center gap-10">
+                    <a href="#philosophy" onclick="smoothScroll(event, 'philosophy')" class="text-[11px] font-medium tracking-wider uppercase text-slate-500 hover:text-indigo-600 transition-colors">Philosophy</a>
+                    <a href="#expertise" onclick="smoothScroll(event, 'expertise')" class="text-[11px] font-medium tracking-wider uppercase text-slate-500 hover:text-indigo-600 transition-colors">Expertise</a>
+                    <a href="#about" onclick="smoothScroll(event, 'about')" class="text-[11px] font-medium tracking-wider uppercase text-slate-500 hover:text-indigo-600 transition-colors">About</a>
+                    <a href="#contact" onclick="smoothScroll(event, 'contact')" class="px-6 py-2.5 text-[11px] font-medium tracking-wider uppercase bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:shadow-lg hover:shadow-indigo-500/30 transition-all">
+                        Connect
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden gradient-mesh grain">
+        <div class="absolute inset-0 opacity-30">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-indigo-200 to-purple-200 rounded-full mix-blend-multiply filter blur-3xl animate-float"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full mix-blend-multiply filter blur-3xl animate-float" style="animation-delay: 2s;"></div>
+        </div>
+
+        <div class="relative z-10 max-w-6xl mx-auto px-6 lg:px-12 py-32 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full border border-slate-200/60 bg-white/40 backdrop-blur-sm">
+                <div class="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 animate-pulse"></div>
+                <span class="text-[10px] font-medium tracking-[0.25em] text-slate-600 uppercase">
+                    Architect of Future Business
+                </span>
+            </div>
+
+            <h1 class="font-display text-6xl md:text-8xl lg:text-9xl font-light tracking-tight text-slate-900 mb-8 leading-[0.95] text-balance">
+                Innovation
+                <br/>
+                meets
+                <br/>
+                <span class="text-gradient font-medium italic">Intelligence</span>
+            </h1>
+
+            <p class="max-w-2xl mx-auto text-base md:text-lg font-light text-slate-600 leading-relaxed mb-12 text-balance">
+                AIの無限の可能性とエンタープライズの堅牢性を融合し、<br class="hidden md:block"/>
+                ビジネスに真の変革をもたらす。
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#expertise" onclick="smoothScroll(event, 'expertise')" class="group px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full text-sm font-medium tracking-wide hover:shadow-xl hover:shadow-indigo-500/30 hover:scale-105 transition-all">
+                    Explore Work
+                    <span class="inline-block ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                </a>
+                <a href="#about" onclick="smoothScroll(event, 'about')" class="px-8 py-4 bg-white/60 backdrop-blur-sm border border-slate-200 text-slate-700 rounded-full text-sm font-medium tracking-wide hover:bg-white hover:border-slate-300 transition-all">
+                    Learn More
+                </a>
+            </div>
+        </div>
+
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-30">
+            <span class="text-[8px] font-medium tracking-[0.4em] uppercase text-slate-600">Scroll</span>
+            <div class="w-[1px] h-16 bg-gradient-to-b from-slate-400 to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section id="philosophy" class="py-32 bg-white grain relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-50/50 to-transparent pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-6xl mx-auto px-6 lg:px-12">
+            <div class="mb-20">
+                <span class="text-[10px] font-medium tracking-[0.3em] text-indigo-600 uppercase mb-4 block">Philosophy</span>
+                <h2 class="font-display text-4xl md:text-6xl font-light tracking-tight text-slate-900 mb-6">
+                    価値を生む、<br/>
+                    三つの<span class="italic font-medium">原則</span>
+                </h2>
+                <div class="w-16 h-[1px] bg-gradient-to-r from-indigo-600 to-purple-600"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-20">
+                <div class="group p-8 bg-gradient-to-br from-white to-slate-50 rounded-3xl border border-slate-200/60 hover:border-indigo-200 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 hover-lift">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="text-white font-display text-xl">1</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-medium text-slate-900 mb-4 tracking-tight">
+                        実行力
+                    </h3>
+                    <p class="text-sm font-light text-slate-600 leading-relaxed">
+                        構想だけでなく、確実な実務遂行。約束したことを、期待を超える形で完遂する。
+                    </p>
+                </div>
+
+                <div class="group p-8 bg-gradient-to-br from-white to-slate-50 rounded-3xl border border-slate-200/60 hover:border-indigo-200 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 hover-lift" style="animation-delay: 0.1s;">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="text-white font-display text-xl">2</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-medium text-slate-900 mb-4 tracking-tight">
+                        本質追求
+                    </h3>
+                    <p class="text-sm font-light text-slate-600 leading-relaxed">
+                        表面的な解決ではなく、真に機能するソリューション。現場に根ざした実効性を重視。
+                    </p>
+                </div>
+
+                <div class="group p-8 bg-gradient-to-br from-white to-slate-50 rounded-3xl border border-slate-200/60 hover:border-indigo-200 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 hover-lift" style="animation-delay: 0.2s;">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="text-white font-display text-xl">3</span>
+                    </div>
+                    <h3 class="font-display text-2xl font-medium text-slate-900 mb-4 tracking-tight">
+                        誠実性
+                    </h3>
+                    <p class="text-sm font-light text-slate-600 leading-relaxed">
+                        技術への誠実さ、クライアントへの誠実さ。信頼こそが、すべての基盤となる。
+                    </p>
+                </div>
+            </div>
+
+            <div class="relative p-12 md:p-16 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 opacity-50"></div>
+                <div class="relative z-10">
+                    <p class="font-display text-2xl md:text-4xl font-light text-white/90 italic leading-relaxed text-balance">
+                        "これらを通じて、社会に持続的な価値を創造する"
+                    </p>
+                    <div class="mt-8 flex items-center gap-4">
+                        <div class="w-12 h-[1px] bg-gradient-to-r from-indigo-400 to-transparent"></div>
+                        <span class="text-xs font-light tracking-wider text-slate-400 uppercase">Mitsuru Otaka</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expertise / Services -->
+    <section id="expertise" class="py-32 bg-slate-50 grain">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+                <div>
+                    <span class="text-[10px] font-medium tracking-[0.3em] text-indigo-600 uppercase mb-4 block">Expertise</span>
+                    <h2 class="font-display text-4xl md:text-6xl font-light tracking-tight text-slate-900">
+                        専門領域
+                    </h2>
+                </div>
+                <p class="text-sm font-light text-slate-500 max-w-md">
+                    AI時代の最先端技術から、エンタープライズの堅牢な基盤まで。
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- AI Creation -->
+                <div onclick="openServiceModal('AI CREATION')" class="group cursor-pointer bg-white rounded-3xl p-8 border border-slate-200/60 hover:border-indigo-200 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 hover-lift">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                        </div>
+                        <span class="text-[10px] font-medium tracking-[0.2em] text-slate-300 group-hover:text-indigo-400 transition-colors">01</span>
+                    </div>
+                    <h3 class="text-xl font-medium text-slate-900 mb-3 tracking-tight">AI Creation</h3>
+                    <p class="text-sm font-light text-slate-600 leading-relaxed mb-6">
+                        生成AIによる革新的なコンテンツ制作・アプリケーション開発
+                    </p>
+                    <div class="flex items-center gap-2 text-xs font-medium text-indigo-600 group-hover:gap-3 transition-all">
+                        詳細を見る
+                        <span class="group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                </div>
+
+                <!-- AI Strategy -->
+                <div onclick="openServiceModal('AI STRATEGY')" class="group cursor-pointer bg-white rounded-3xl p-8 border border-slate-200/60 hover:border-indigo-200 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 hover-lift">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <span class="text-[10px] font-medium tracking-[0.2em] text-slate-300 group-hover:text-indigo-400 transition-colors">02</span>
+                    </div>
+                    <h3 class="text-xl font-medium text-slate-900 mb-3 tracking-tight">AI Strategy</h3>
+                    <p class="text-sm font-light text-slate-600 leading-relaxed mb-6">
+                        企業のAI導入から活用まで、戦略立案とコンサルティング
+                    </p>
+                    <div class="flex items-center gap-2 text-xs font-medium text-indigo-600 group-hover:gap-3 transition-all">
+                        詳細を見る
+                        <span class="group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                </div>
+
+                <!-- Infrastructure -->
+                <div onclick="openServiceModal('IT INFRASTRUCTURE')" class="group cursor-pointer bg-white rounded-3xl p-8 border border-slate-200/60 hover:border-indigo-200 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 hover-lift">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/>
+                            </svg>
+                        </div>
+                        <span class="text-[10px] font-medium tracking-[0.2em] text-slate-300 group-hover:text-indigo-400 transition-colors">03</span>
+                    </div>
+                    <h3 class="text-xl font-medium text-slate-900 mb-3 tracking-tight">Infrastructure</h3>
+                    <p class="text-sm font-light text-slate-600 leading-relaxed mb-6">
+                        エンタープライズグレードのITインフラ設計・構築・運用
+                    </p>
+                    <div class="flex items-center gap-2 text-xs font-medium text-indigo-600 group-hover:gap-3 transition-all">
+                        詳細を見る
+                        <span class="group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div onclick="openServiceModal('EDUCATION')" class="group cursor-pointer bg-white rounded-3xl p-8 border border-slate-200/60 hover:border-indigo-200 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 hover-lift">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                        </div>
+                        <span class="text-[10px] font-medium tracking-[0.2em] text-slate-300 group-hover:text-indigo-400 transition-colors">04</span>
+                    </div>
+                    <h3 class="text-xl font-medium text-slate-900 mb-3 tracking-tight">Education</h3>
+                    <p class="text-sm font-light text-slate-600 leading-relaxed mb-6">
+                        次世代エンジニア・リーダー育成のための実践的プログラム
+                    </p>
+                    <div class="flex items-center gap-2 text-xs font-medium text-indigo-600 group-hover:gap-3 transition-all">
+                        詳細を見る
+                        <span class="group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Modal -->
+    <div id="serviceModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/80 backdrop-blur-xl">
+        <div class="bg-white w-full max-w-5xl rounded-3xl overflow-hidden relative shadow-2xl">
+            <button onclick="closeServiceModal()" class="absolute top-8 right-8 p-3 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors z-20">
+                <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+                <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-12 lg:p-16 text-white flex flex-col justify-between min-h-[500px] relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 opacity-50"></div>
+                    <div class="relative z-10">
+                        <span class="text-[9px] font-medium tracking-[0.3em] text-indigo-400 uppercase mb-4 block">Service</span>
+                        <h3 id="modalTitle" class="font-display text-4xl font-medium mb-4 tracking-tight"></h3>
+                        <p id="modalSubtitle" class="text-xs font-light tracking-[0.2em] text-slate-400 uppercase mb-8"></p>
+                        <p id="modalDescription" class="text-sm font-light text-slate-300 leading-relaxed"></p>
+                    </div>
+                    <div id="modalTools" class="flex flex-wrap gap-2 relative z-10"></div>
+                </div>
+
+                <div class="p-12 lg:p-16 flex flex-col justify-center bg-slate-50">
+                    <h4 class="text-[9px] font-medium tracking-[0.3em] text-slate-500 uppercase mb-8 pb-4 border-b border-slate-200">提供内容</h4>
+                    <ul id="modalPoints" class="space-y-4 mb-12"></ul>
+                    <a href="#contact" onclick="closeServiceModal(); smoothScroll(event, 'contact')" class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full text-sm font-medium tracking-wide hover:shadow-xl hover:shadow-indigo-500/30 transition-all">
+                        お問い合わせ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About -->
+    <section id="about" class="py-32 bg-white grain">
+        <div class="max-w-6xl mx-auto px-6 lg:px-12">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <span class="text-[10px] font-medium tracking-[0.3em] text-indigo-600 uppercase mb-4 block">Profile</span>
+                    <h2 class="font-display text-2xl md:text-3xl font-light tracking-tight text-slate-900 mb-4">
+                        大高 <span class="italic font-medium">充</span>
+                    </h2>
+                    <p class="text-sm font-light tracking-wider text-slate-500 uppercase mb-12">Mitsuru Otaka</p>
+
+                    <div class="space-y-6 text-sm font-light text-slate-700 leading-relaxed mb-12">
+                        <p>
+                            1987年、日本IBMに入社。大規模システムのインフラ保守最前線で技術の本質を学び、教育講師として多数のエンジニアを育成。グループリーダー、プロジェクトリーダーを経て、組織マネジメントと高度な技術力の融合を実践。
+                        </p>
+                        <p>
+                            現在は独立し、<span class="font-medium text-slate-900">B&A (Business & AI)</span> を設立。生成AIを活用したクリエイティブ制作、AI導入戦略支援、エンタープライズインフラ構築、次世代人材育成まで、一気通貫のソリューションを提供。
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-8">
+                        <div>
+                            <span class="text-[9px] font-medium tracking-[0.3em] text-slate-400 uppercase block mb-2">IBM入社</span>
+                            <span class="text-sm font-light text-slate-700">1987年</span>
+                        </div>
+                        <div>
+                            <span class="text-[9px] font-medium tracking-[0.3em] text-slate-400 uppercase block mb-2">Company</span>
+                            <span class="text-sm font-light text-slate-700">日本IBM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="p-8 bg-gradient-to-br from-slate-50 to-white rounded-3xl border border-slate-200/60">
+                        <h4 class="text-[9px] font-medium tracking-[0.3em] text-indigo-600 uppercase mb-4">Credentials</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 mt-2"></div>
+                                <div>
+                                    <p class="font-medium text-slate-900 text-sm">AIX 認定管理者</p>
+                                    <p class="text-xs font-light text-slate-500">IBM Enterprise</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 mt-2"></div>
+                                <div>
+                                    <p class="font-medium text-slate-900 text-sm">LPIC-1</p>
+                                    <p class="text-xs font-light text-slate-500">Linux Professional</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 mt-2"></div>
+                                <div>
+                                    <p class="font-medium text-slate-900 text-sm">Apple 修理認定資格</p>
+                                    <p class="text-xs font-light text-slate-500">Hardware Specialist</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-8 bg-gradient-to-br from-slate-50 to-white rounded-3xl border border-slate-200/60">
+                        <h4 class="text-[9px] font-medium tracking-[0.3em] text-indigo-600 uppercase mb-4">Capabilities</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1.5 bg-white border border-slate-200 rounded-full text-[10px] font-light text-slate-700">Generative AI</span>
+                            <span class="px-3 py-1.5 bg-white border border-slate-200 rounded-full text-[10px] font-light text-slate-700">AI Strategy</span>
+                            <span class="px-3 py-1.5 bg-white border border-slate-200 rounded-full text-[10px] font-light text-slate-700">AIX / Linux</span>
+                            <span class="px-3 py-1.5 bg-white border border-slate-200 rounded-full text-[10px] font-light text-slate-700">Network Design</span>
+                            <span class="px-3 py-1.5 bg-white border border-slate-200 rounded-full text-[10px] font-light text-slate-700">Cloud Migration</span>
+                            <span class="px-3 py-1.5 bg-white border border-slate-200 rounded-full text-[10px] font-light text-slate-700">Engineer Training</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-32 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 opacity-50"></div>
+
+        <div class="relative z-10 max-w-4xl mx-auto px-6 lg:px-12 text-center">
+            <span class="text-[10px] font-medium tracking-[0.3em] text-indigo-400 uppercase mb-4 block">Get in Touch</span>
+            <h2 class="font-display text-4xl md:text-6xl font-light text-white mb-6 tracking-tight">
+                Let's create something
+                <br/>
+                <span class="italic font-medium">extraordinary</span>
+            </h2>
+            <p class="text-sm font-light text-slate-300 leading-relaxed mb-12 max-w-2xl mx-auto">
+                新しいプロジェクトのご相談、技術的なお悩み、研修のご依頼など、<br class="hidden md:block"/>
+                お気軽にお問い合わせください。
+            </p>
+
+            <form class="max-w-xl mx-auto space-y-6" onsubmit="handleContactSubmit(event)">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <input
+                        type="text"
+                        required
+                        placeholder="お名前"
+                        class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-slate-400 focus:bg-white/20 focus:border-indigo-400 transition-all outline-none backdrop-blur-sm"
+                    />
+                    <input
+                        type="email"
+                        required
+                        placeholder="メールアドレス"
+                        class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-slate-400 focus:bg-white/20 focus:border-indigo-400 transition-all outline-none backdrop-blur-sm"
+                    />
+                </div>
+                <textarea
+                    rows="5"
+                    required
+                    placeholder="お問い合わせ内容をご記入ください"
+                    class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-slate-400 focus:bg-white/20 focus:border-indigo-400 transition-all outline-none backdrop-blur-sm resize-none"
+                ></textarea>
+                <button
+                    type="submit"
+                    class="w-full px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full text-sm font-medium tracking-wide hover:shadow-xl hover:shadow-indigo-500/30 hover:scale-105 transition-all"
+                >
+                    送信する
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-slate-900 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-extralight text-slate-700 opacity-40">大高 充</span>
+                    <span class="text-slate-700">·</span>
+                    <span class="text-xs font-light tracking-[0.2em] text-slate-600 uppercase">Business & AI</span>
+                </div>
+
+                <div class="flex items-center gap-8">
+                    <a href="#philosophy" onclick="smoothScroll(event, 'philosophy')" class="text-xs font-light text-slate-500 hover:text-indigo-400 transition-colors">Philosophy</a>
+                    <a href="#expertise" onclick="smoothScroll(event, 'expertise')" class="text-xs font-light text-slate-500 hover:text-indigo-400 transition-colors">Expertise</a>
+                    <a href="#about" onclick="smoothScroll(event, 'about')" class="text-xs font-light text-slate-500 hover:text-indigo-400 transition-colors">About</a>
+                </div>
+
+                <p class="text-xs font-extralight text-slate-600 tracking-wide opacity-60">© 2026 B&A</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const serviceDetails = {
+            "AI CREATION": {
+                title: "AI Creation",
+                subtitle: "Generative Innovation",
+                description: "最新の生成AIをワークフローの核に据え、画像・動画・Webアプリケーションの制作プロセスを劇的に進化させます。圧倒的なスピードと品質の両立を実現。",
+                points: [
+                    "Midjourney / Stable Diffusion による商用ビジュアル制作",
+                    "Runway / Luma を用いたハイクオリティAI動画生成",
+                    "Cursor 等のAIエディタによる高速Web開発",
+                    "AIを活用したクリエイティブ・ディレクション"
+                ],
+                tools: ["Midjourney", "Runway", "Cursor", "Windsurf", "v0"]
+            },
+            "AI STRATEGY": {
+                title: "AI Strategy",
+                subtitle: "Consulting & Advisory",
+                description: "企業の競争力を再定義するAI導入戦略。単なる技術導入ではなく、業務プロセスと組織文化に深く根ざしたAI活用をプロデュース。",
+                points: [
+                    "社内専用LLM（ナレッジベース）の構築支援",
+                    "AIエージェントによる定型業務の自動化設計",
+                    "AIガバナンスおよび利用ガイドラインの策定",
+                    "AI導入によるビジネスインパクトの最大化"
+                ],
+                tools: ["OpenAI", "Claude", "Dify", "Make", "LangChain"]
+            },
+            "IT INFRASTRUCTURE": {
+                title: "Infrastructure",
+                subtitle: "System Architecture",
+                description: "IBM AIX等のエンタープライズ領域から、クラウドネイティブなモダン環境まで。止まらないビジネスを支える、堅牢な基盤を設計・構築。",
+                points: [
+                    "基幹系サーバー（AIX / Linux）の設計・構築・運用",
+                    "ゼロトラスト・ネットワークの設計とセキュリティ強化",
+                    "オンプレミスからクラウドへのマイグレーション支援",
+                    "24時間365日の安定稼働を実現する保守管理"
+                ],
+                tools: ["IBM AIX", "RHEL", "AWS", "Cisco", "Terraform", "Ansible"]
+            },
+            "EDUCATION": {
+                title: "Education",
+                subtitle: "Talent Development",
+                description: "技術を「知る」から「使いこなす」へ。次世代のエンジニアおよびリーダーを育成するための、実践的かつ高度な教育プログラムを提供。",
+                points: [
+                    "生成AIリテラシー・プロンプトエンジニアリング研修",
+                    "ITインフラ・ネットワーク専門エンジニア育成",
+                    "次世代プロジェクトリーダー向けマネジメント教育",
+                    "ヒューマンスキルと技術スキルを融合した総合研修"
+                ],
+                tools: ["Curriculum Design", "Skill Assessment", "Hands-on Training"]
+            }
+        };
+
+        let scrolled = false;
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('nav');
+            const currentScrolled = window.scrollY > 50;
+
+            if (currentScrolled !== scrolled) {
+                scrolled = currentScrolled;
+                if (scrolled) {
+                    nav.classList.add('frosted', 'border-b', 'border-slate-200/60', 'shadow-lg', 'shadow-slate-200/20', 'py-4');
+                } else {
+                    nav.classList.remove('frosted', 'border-b', 'border-slate-200/60', 'shadow-lg', 'shadow-slate-200/20', 'py-4');
+                }
+            }
+        });
+
+        function smoothScroll(e, id) {
+            e.preventDefault();
+            const element = document.getElementById(id);
+            if (element) {
+                const headerHeight = 100;
+                const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openServiceModal(serviceName) {
+            const modal = document.getElementById('serviceModal');
+            const service = serviceDetails[serviceName];
+
+            if (service) {
+                document.getElementById('modalTitle').textContent = service.title;
+                document.getElementById('modalSubtitle').textContent = service.subtitle;
+                document.getElementById('modalDescription').textContent = service.description;
+
+                const pointsContainer = document.getElementById('modalPoints');
+                pointsContainer.innerHTML = '';
+                service.points.forEach(point => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-start gap-3 text-sm font-light text-slate-700 leading-relaxed';
+                    li.innerHTML = `
+                        <div class="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 mt-2"></div>
+                        <span>${point}</span>
+                    `;
+                    pointsContainer.appendChild(li);
+                });
+
+                const toolsContainer = document.getElementById('modalTools');
+                toolsContainer.innerHTML = '';
+                if (service.tools) {
+                    service.tools.forEach(tool => {
+                        const span = document.createElement('span');
+                        span.className = 'px-3 py-1.5 bg-white/10 border border-white/20 rounded-full text-[10px] text-slate-400 font-light';
+                        span.textContent = tool;
+                        toolsContainer.appendChild(span);
+                    });
+                }
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeServiceModal() {
+            const modal = document.getElementById('serviceModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            alert('お問い合わせありがとうございます。担当者より折り返しご連絡させていただきます。');
+            e.target.reset();
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeServiceModal();
+        });
+
+        document.getElementById('serviceModal')?.addEventListener('click', function(e) {
+            if (e.target === this) closeServiceModal();
+        });
+    </script>
+</body>
+</html>
