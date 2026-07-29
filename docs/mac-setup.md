@@ -1,0 +1,230 @@
+# Mac リモート開発セットアップガイド
+
+外出先から自宅の Mac に遠隔接続してコード開発を行い、GitHub 経由で成果を同期するための手順書。
+
+---
+
+## 0. 全体像
+
+```
+[外出先のスマホ / PC]
+        │
+        │ ① 遠隔接続（SSH / 画面共有）
+        ▼
+   [自宅の Mac]  ←── ここで開発する
+        │
+        │ ② GitHub 連携（clone / commit / push / pull）
+        ▼
+    [GitHub]  ←── mochanwanwan アカウントに集約
+        │
+        │ ③ すでに連携済み
+        ▼
+[Claude Code on the web]
+```
+
+①がネットワークの話、②③が GitHub の話。**②を正しく設定すれば、Mac で書いたコードもクラウドで書いたコードも同じ場所に集まる。**
+
+---
+
+## 1. アカウントを1つに集約する
+
+### 現状の問題
+
+3つの GitHub アカウントが混在しており、これが「push したはずのリポジトリが見つからない」原因になっていた。
+
+| アカウント | 保有物 | 状態 |
+| --- | --- | --- |
+| `MICHANWANWAN` | `VTT` | Mac の `gh` でアクティブ |
+| `mochanwanwan` | `portfolio` ほか全15リポジトリ | **こちらを主軸にする** |
+| `primeprojecta-beep` | （コミット作者設定のみ） | 実体なし |
+
+`MICHANWANWAN` と `mochanwanwan` は **i と o が1文字違うだけの別アカウント**。見間違えやすいので注意。
+
+### 手順 1-1: `VTT` を `mochanwanwan` へ移管する
+
+1. ブラウザで **`MICHANWANWAN` としてログイン**する
+   - 右上のアイコンでアカウント名を必ず確認すること
+   - `mochanwanwan` のままだと移管操作ができない
+2. `https://github.com/MICHANWANWAN/VTT/settings` を開く
+3. ページ最下部の **Danger Zone** → **Transfer ownership** をクリック
+4. New owner に `mochanwanwan` と入力
+5. 確認のためリポジトリ名 `VTT` を入力して実行
+6. **`mochanwanwan` 側で承認する** — 招待メールが届くか、GitHub 上に通知が出るので承認する
+
+移管後の URL は `https://github.com/mochanwanwan/VTT` になる。
+
+### 手順 1-2: Claude から見えることを確認する
+
+移管が完了すると、`mochanwanwan` には Claude の GitHub App が導入済みのため、原則そのまま見えるようになる。
+
+見えない場合は `https://github.com/settings/installations`（`mochanwanwan` でログインした状態）を開き、Claude の **Repository access** に `VTT` が含まれているか確認する。`Only select repositories` になっている場合は `VTT` を選択に追加する。
+
+---
+
+## 2. Mac 側のアカウント整理
+
+移管が終わったら、Mac 側も `mochanwanwan` に揃える。ターミナルで実行する。
+
+```bash
+# gh のアクティブアカウントを切り替える
+gh auth switch --user mochanwanwan
+
+# 切り替わったか確認（mochanwanwan の Active account が true になっていること）
+gh auth status
+```
+
+次に、コミットの署名を GitHub アカウントと一致させる。現状 `primeprojecta@gmail.com` になっており、コミットが GitHub 上で正しく紐付いていない。
+
+```bash
+git config --global user.name "mochanwanwan"
+git config --global user.email "174401109+mochanwanwan@users.noreply.github.com"
+
+# 確認
+git config --global --get user.name
+git config --global --get user.email
+```
+
+> **なぜこのメールアドレスなのか**
+> `174401109+mochanwanwan@users.noreply.github.com` は GitHub が発行する非公開メール。
+> 実際のアドレスを公開リポジトリに晒さずに、コミットを GitHub アカウントへ正しく紐付けられる。
+
+---
+
+## 3. Mac 側のリモート URL を張り替える
+
+移管によりリポジトリの所在が変わったため、Mac のローカルリポジトリに教え直す。
+
+```bash
+cd ~/path/to/VTT     # VTT のフォルダへ移動（実際のパスに置き換える）
+
+# 現在の設定を確認
+git remote -v
+
+# 新しい URL に張り替える
+git remote set-url origin https://github.com/mochanwanwan/VTT.git
+
+# 張り替わったか確認し、通信できるかテストする
+git remote -v
+git fetch origin
+```
+
+`git fetch origin` がエラーなく完了すれば成功。
+
+> GitHub は旧 URL から自動リダイレクトしてくれるが、それに頼ると後で混乱するため明示的に張り替える。
+
+---
+
+## 4. Mac へのリモート接続
+
+### 4-1: Mac 側で共有を有効にする
+
+**システム設定 → 一般 → 共有** を開き、必要なものをオンにする。
+
+| 機能 | 用途 |
+| --- | --- |
+| **リモートログイン** | SSH でターミナル操作。Claude Code を動かすならこれ |
+| **画面共有** | Mac のデスクトップをそのまま操作したい場合 |
+
+### 4-2: Mac がスリープしないようにする
+
+スリープすると接続できなくなる。**システム設定 → ロック画面**、および電源設定で以下を調整する。
+
+- ディスプレイのオフはしてよい（画面が消えるだけ）
+- **「使用していないときにコンピュータを自動でスリープさせる」はオフ**にする
+- ノートの場合は電源アダプタに接続しておく
+
+### 4-3: 外出先から繋ぐ
+
+⚠️ **ルーターのポート開放（ポートフォワーディング）で SSH を直接インターネットに晒すのは避けること。** 総当たり攻撃の標的になる。
+
+代わりに **Tailscale**（無料・個人利用可）を推奨する。
+
+1. Mac に Tailscale をインストールしてログイン
+2. スマホ / 外出先の PC にも同じアカウントでインストール
+3. 両者が同じ仮想ネットワークに入るので、外出先から Mac の Tailscale IP へ直接 SSH できる
+
+```bash
+# 外出先の端末から
+ssh ユーザー名@100.x.x.x     # Tailscale が割り当てた IP
+```
+
+ルーター設定の変更が一切不要で、通信も暗号化される。
+
+---
+
+## 5. 日々の作業の流れ
+
+**この順番を守ることが最も重要。**
+
+```bash
+cd ~/path/to/VTT
+
+# ① 作業前に必ず最新を取り込む
+git pull
+
+# ② コードを編集する（Claude Code でもエディタでも）
+
+# ③ 変更を記録して GitHub へ送る
+git add -A
+git commit -m "何を変えたかを簡潔に書く"
+git push
+```
+
+### 鉄則
+
+- **作業前に `git pull`、作業後に `git push`**
+- これを守らないと、Mac とクラウドで別々の変更が育ち、衝突（コンフリクト）が起きる
+- 迷ったらまず `git status` — 今どういう状態かを教えてくれる
+
+---
+
+## 6. トラブルシューティング
+
+### `git push` したのに GitHub に無い
+
+まず送り先と送り主を確認する。
+
+```bash
+git remote -v      # どこへ送る設定か
+gh auth status     # 誰としてログインしているか
+git log --oneline -3   # そもそもコミットされているか
+```
+
+**アカウントの取り違え**が最も多い原因。`MICHANWANWAN` と `mochanwanwan` は特に紛らわしい。
+
+### `Permission denied` / `403` が出る
+
+アクティブなアカウントに、そのリポジトリへの権限がない。
+
+```bash
+gh auth switch --user mochanwanwan
+```
+
+### `not a git repository` と出る
+
+そのフォルダはまだ Git 管理されていない。新規に GitHub へ上げる場合は以下。
+
+```bash
+cd ~/path/to/フォルダ
+git init
+git add -A
+git commit -m "最初のコミット"
+
+# GitHub 上にリポジトリを作って push まで一気に行う
+gh repo create mochanwanwan/リポジトリ名 --private --source=. --push
+```
+
+### コミットが GitHub 上で自分の名前にならない
+
+`git config --global user.email` が GitHub に登録されたメールと一致していない。→ **第2章**を再実行する。
+
+なお、過去のコミットの作者は後から変えられない。今後のコミットから正しくなる。
+
+---
+
+## 参考リンク
+
+- [GitHub: リポジトリの移管](https://docs.github.com/ja/repositories/creating-and-managing-repositories/transferring-a-repository)
+- [GitHub: コミットメールアドレスの設定](https://docs.github.com/ja/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address)
+- [Tailscale](https://tailscale.com/)
+- [Claude Code on the web ドキュメント](https://code.claude.com/docs/en/claude-code-on-the-web)
