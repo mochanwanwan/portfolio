@@ -32,26 +32,53 @@
 
 3つの GitHub アカウントが混在しており、これが「push したはずのリポジトリが見つからない」原因になっていた。
 
-| アカウント | 保有物 | 状態 |
-| --- | --- | --- |
-| `MICHANWANWAN` | `VTT` | Mac の `gh` でアクティブ |
-| `mochanwanwan` | `portfolio` ほか全15リポジトリ | **こちらを主軸にする** |
-| `primeprojecta-beep` | （コミット作者設定のみ） | 実体なし |
+| アカウント | リポジトリ数 | 最終更新 | Claude 連携 |
+| --- | --- | --- | --- |
+| `MICHANWANWAN` | 14 | **数十分前**（VTT） | ❌ 未連携 |
+| `mochanwanwan` | 15 | 2週間前（lp-1） | ✅ 連携済み |
+| `primeprojecta-beep` | （コミット作者設定のみ） | — | — |
 
 `MICHANWANWAN` と `mochanwanwan` は **i と o が1文字違うだけの別アカウント**。見間違えやすいので注意。
 
+⚠️ **実際に開発が動いているのは `MICHANWANWAN` 側**（AI-kenshu、DOUGA-JIDOU-TOUKOU-2、PSB2 など直近1ヶ月で6件更新）。`mochanwanwan` は `portfolio` を除くとほぼ休眠状態。
+
+### ⚠️ 名前衝突リポジトリ
+
+以下は**両方のアカウントに同名で存在する**。同一アカウントに同名リポジトリは共存できないため、これらを移管する際は事前にどちらかをリネームする必要がある。
+
+- `lp-1`
+- `training-service-lp`
+
+`VTT` は `mochanwanwan` 側に存在しないため、そのまま移管できる。
+
 ### 手順 1-1: `VTT` を `mochanwanwan` へ移管する
 
+#### 方法A: コマンドで実行する（推奨）
+
+Mac の `gh` は `MICHANWANWAN` として認証済み（=`VTT` の管理権限あり）なので、ターミナルから直接実行できる。ブラウザでのログインし直しが不要。
+
+```bash
+# 念のためアクティブアカウントを確認（MICHANWANWAN であること）
+gh auth status
+
+# 移管を実行する
+gh api -X POST repos/MICHANWANWAN/VTT/transfer -f new_owner=mochanwanwan
+```
+
+#### 方法B: ブラウザで実行する
+
 1. ブラウザで **`MICHANWANWAN` としてログイン**する
-   - 右上のアイコンでアカウント名を必ず確認すること
-   - `mochanwanwan` のままだと移管操作ができない
+   - プロフィール画面に **「Follow」** ボタンが出ていたら、それは**別アカウントで他人として見ている状態**。自分のページなら「Edit profile」が出る
 2. `https://github.com/MICHANWANWAN/VTT/settings` を開く
-3. ページ最下部の **Danger Zone** → **Transfer ownership** をクリック
+3. ページ最下部の **Danger Zone** → **Transfer ownership**
 4. New owner に `mochanwanwan` と入力
 5. 確認のためリポジトリ名 `VTT` を入力して実行
-6. **`mochanwanwan` 側で承認する** — 招待メールが届くか、GitHub 上に通知が出るので承認する
 
-移管後の URL は `https://github.com/mochanwanwan/VTT` になる。
+#### 移管後: 受け取り側で承認する
+
+個人アカウント間の移管は、**受け取り側（`mochanwanwan`）の承認**が必要。招待メールが届くか GitHub 上に通知が出るので承認する。
+
+承認が完了すると URL は `https://github.com/mochanwanwan/VTT` になる。
 
 ### 手順 1-2: Claude から見えることを確認する
 
