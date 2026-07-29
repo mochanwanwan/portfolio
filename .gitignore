@@ -1,0 +1,23 @@
+# macOS が勝手に作るファイル
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# エディタ / IDE の設定
+.vscode/
+.idea/
+*.swp
+*~
+
+# 秘密情報（API キーなど。絶対に GitHub に上げない）
+.env
+.env.local
+*.pem
+
+# ログ・一時ファイル
+*.log
+tmp/
+
+# 依存パッケージ（今後 Node.js などを使う場合）
+node_modules/
