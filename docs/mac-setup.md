@@ -154,23 +154,52 @@ git config user.email "MICHANWANWAN の非公開メール"
 
 移管によりリポジトリの所在が変わったため、Mac のローカルリポジトリに教え直す。
 
+**`VTT` の場所: `/Users/mit/projects/VTT`**
+
+以下を**1行ずつ**実行する。
+
 ```bash
-cd ~/path/to/VTT     # VTT のフォルダへ移動（実際のパスに置き換える）
+cd /Users/mit/projects/VTT
+```
 
-# 現在の設定を確認
+```bash
 git remote -v
+```
 
-# 新しい URL に張り替える
+```bash
 git remote set-url origin https://github.com/mochanwanwan/VTT.git
+```
 
-# 張り替わったか確認し、通信できるかテストする
-git remote -v
+```bash
+gh auth switch --user mochanwanwan
+```
+
+```bash
 git fetch origin
 ```
+
+| コマンド | 目的 |
+| --- | --- |
+| `git remote -v` | 張り替え前の送り先を確認 |
+| `git remote set-url` | 移管後の新しい場所を教える |
+| `gh auth switch` | `VTT` の新しい持ち主 `mochanwanwan` の権限に切り替える |
+| `git fetch origin` | 実際に通信できるか検証 |
 
 `git fetch origin` がエラーなく完了すれば成功。
 
 > GitHub は旧 URL から自動リダイレクトしてくれるが、それに頼ると後で混乱するため明示的に張り替える。
+
+### リポジトリの場所
+
+| リポジトリ | Mac 上のパス | GitHub |
+| --- | --- | --- |
+| `VTT` | `/Users/mit/projects/VTT` | `mochanwanwan/VTT` |
+
+> 他のリポジトリの場所が分からなくなったら、以下で探せる。
+>
+> ```bash
+> find ~ -maxdepth 4 -type d -name ".git" -exec dirname {} \; 2>/dev/null
+> ```
 
 ---
 
@@ -326,17 +355,32 @@ ssh ユーザー名@100.x.x.x     # Tailscale が割り当てた IP
 
 **この順番を守ることが最も重要。**
 
+| 順 | コマンド | 意味 |
+| --- | --- | --- |
+| ① | `cd /Users/mit/projects/VTT` | 作業フォルダへ移動 |
+| ② | `git pull` | **作業前に必ず**最新を取り込む |
+| ③ | （編集する） | Claude Code でもエディタでも |
+| ④ | `git add -A` | 変更をまとめる |
+| ⑤ | `git commit -m "変更内容"` | 記録する |
+| ⑥ | `git push` | GitHub へ送る |
+
 ```bash
-cd ~/path/to/VTT
+cd /Users/mit/projects/VTT
+```
 
-# ① 作業前に必ず最新を取り込む
+```bash
 git pull
+```
 
-# ② コードを編集する（Claude Code でもエディタでも）
-
-# ③ 変更を記録して GitHub へ送る
+```bash
 git add -A
+```
+
+```bash
 git commit -m "何を変えたかを簡潔に書く"
+```
+
+```bash
 git push
 ```
 
