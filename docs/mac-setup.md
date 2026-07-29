@@ -178,12 +178,42 @@ git fetch origin
 
 ### 4-1: Mac 側で共有を有効にする
 
-**システム設定 → 一般 → 共有** を開き、必要なものをオンにする。
-
 | 機能 | 用途 |
 | --- | --- |
-| **リモートログイン** | SSH でターミナル操作。Claude Code を動かすならこれ |
+| **リモートログイン（SSH）** | ターミナル操作。Claude Code を動かすならこれ |
 | **画面共有** | Mac のデスクトップをそのまま操作したい場合 |
+
+#### コマンドで有効にする
+
+```bash
+sudo systemsetup -setremotelogin on
+```
+
+有効になったか確認する。
+
+```bash
+sudo systemsetup -getremotelogin
+```
+
+`Remote Login: On` と表示されれば成功。
+
+> `Full Disk Access` の権限エラーが出る場合は、下記の GUI から設定する。
+
+#### GUI で有効にする
+
+**システム設定 → 一般 → 共有** を開き、**リモートログイン** をオンにする。
+
+#### 接続に必要な情報を控える
+
+```bash
+whoami
+```
+
+```bash
+scutil --get LocalHostName
+```
+
+ここで表示されるユーザー名が SSH 接続時の `ユーザー名@` の部分になる。
 
 ### 4-2: Mac がスリープしないようにする
 
