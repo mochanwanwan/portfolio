@@ -90,17 +90,37 @@ gh api -X POST repos/MICHANWANWAN/VTT/transfer -f new_owner=mochanwanwan
 
 ## 2. Mac 側のアカウント整理
 
-移管が終わったら、Mac 側も `mochanwanwan` に揃える。ターミナルで実行する。
+### ⚠️ アカウントは「切り替えて使う」ことになる
+
+`VTT` だけを移管したため、Mac から扱うリポジトリは2つのアカウントに分かれている。
+
+| 作業対象 | 必要なアクティブアカウント |
+| --- | --- |
+| `VTT`、`portfolio` | `mochanwanwan` |
+| `AI-kenshu`、`DOUGA-JIDOU-TOUKOU-2`、`PSB2` ほか12件 | `MICHANWANWAN` |
+
+**`gh auth switch` を一度実行して放置すると、もう一方のアカウントのリポジトリへ push できなくなる。** `gh` は「アクティブなアカウント」のトークンを git に渡すため。
+
+`Permission denied` や `403` が出たら、まず今どちらがアクティブか疑うこと。
 
 ```bash
-# gh のアクティブアカウントを切り替える
+# 今どちらがアクティブか確認する
+gh auth status
+
+# VTT / portfolio を触る前
 gh auth switch --user mochanwanwan
 
-# 切り替わったか確認（mochanwanwan の Active account が true になっていること）
-gh auth status
+# MICHANWANWAN 側のリポジトリを触る前
+gh auth switch --user MICHANWANWAN
 ```
 
-次に、コミットの署名を GitHub アカウントと一致させる。現状 `primeprojecta@gmail.com` になっており、コミットが GitHub 上で正しく紐付いていない。
+> **切り替えが面倒になったら**
+> `MICHANWANWAN` にも Claude の GitHub App を導入すれば、リポジトリを動かさずに両アカウントを
+> 扱えるようになる。その場合でも Mac 側の `gh` 切り替えは必要だが、リポジトリの移管作業は不要。
+
+### コミットの署名を修正する
+
+現状 `primeprojecta@gmail.com` になっており、コミットが GitHub 上のアカウントへ紐付いていない。**普段いちばん使うアカウントに合わせて**グローバル設定する。
 
 ```bash
 git config --global user.name "mochanwanwan"
@@ -114,6 +134,19 @@ git config --global --get user.email
 > **なぜこのメールアドレスなのか**
 > `174401109+mochanwanwan@users.noreply.github.com` は GitHub が発行する非公開メール。
 > 実際のアドレスを公開リポジトリに晒さずに、コミットを GitHub アカウントへ正しく紐付けられる。
+
+`MICHANWANWAN` 側のリポジトリでは、そのフォルダ内だけ設定を上書きできる（`--global` を付けない）。
+
+```bash
+cd ~/path/to/AI-kenshu
+git config user.name "MICHANWANWAN"
+git config user.email "MICHANWANWAN の非公開メール"
+```
+
+> `MICHANWANWAN` の非公開メールは `https://github.com/settings/emails`（当該アカウントでログイン）
+> の "Keep my email addresses private" 欄で確認できる。
+
+なお、過去のコミットの作者は後から変えられない。今後のコミットから正しくなる。
 
 ---
 
